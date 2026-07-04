@@ -1,6 +1,8 @@
 from database import get_connect,create_table_users,create_table_vault
 from auth import verify_password
 from validation import checkusernamedb
+#gonna add one more table for hashed passwords, separate table for encrypted and hashed ones, create table, diff option for hashing
+
 # decide whether to open admin page or user page for different functions
 def mainpage():
     print("<------------ MAIN PAGE ------------->")
@@ -8,7 +10,7 @@ def mainpage():
     choice = int(input("Enter your Choice : "))
     return choice
 
-def userloginpage():
+def usersigninpage():
     print("<------ USER SIGN IN / SIGN UP ------>")
     print("""1. Already Have an Account ?\n2. Register\n3. Back""")
     choice = int(input("Enter your Choice : "))
@@ -25,8 +27,6 @@ def userlogincheck():
         print("Incorrect Password!")
         return True
     
-
-
 def checktables():
     mycon , cursor = get_connect()
     #checking if tables exists or not , otherwise creating them

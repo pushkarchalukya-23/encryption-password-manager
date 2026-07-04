@@ -1,4 +1,4 @@
-from ui import mainpage,checktables,userloginpage,userlogincheck
+from ui import mainpage,checktables,usersigninpage,userlogincheck
 from auth import register
 
 #main thread
@@ -14,14 +14,16 @@ def run():
 
         elif (choice == 2) :
             while True :
-                choice1 = userloginpage()
+                choice1 = usersigninpage()
                 if choice1 == 1:
-                    while userlogincheck():
-                        pass
+                    while True:
+                        if userlogincheck() :
+                            continue
                     #actual user page
                 elif choice1 == 2:
-                    while register():
-                        pass
+                    while True:
+                        if register() :
+                            continue
                     #actual user page
                 elif choice1 == 3: 
                     break

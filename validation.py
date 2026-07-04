@@ -36,7 +36,6 @@ def checkusername(username):
         print("Spaces not Allowed!")
     return flag
 
-    
 
 # email
 # password
