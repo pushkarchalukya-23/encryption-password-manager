@@ -32,3 +32,6 @@ def run():
         else :
             print("Invalid Choice !")
 
+# git add .
+# git commit -m "Added password strength validator"
+# git push
