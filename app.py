@@ -8,32 +8,33 @@ def run():
     while True :
         #checking choice
         choice = mainpage()
-        if (choice == 1) :
+        if (choice == 1) : #admin panel
             continue
             #adminlogin()
 
-        elif (choice == 2) :
+        elif (choice == 2) : #user panel
             while True :
                 choice1 = usersigninpage()
-                if choice1 == 1:
-                    while True:
-                        if userlogincheck() :
+
+                if choice1 in [1,2]:
+                    if choice1 == 1:
+                        if not userlogincheck() : #user sign in page
                             continue
-                    #actual user page
-                elif choice1 == 2:
-                    while True:
-                        if register() :
+                    elif choice1 == 2:
+                        if not register() : #user registering page
                             continue
-                    #actual user page
+                    #actual user password manager panel
+
                 elif choice1 == 3: 
                     break
                 else:
                     print("Invalid Choice !")
-        elif (choice == 3) :
+        elif (choice == 3) : #exit
             break
         else :
             print("Invalid Choice !")
-
+# git commands
 # git add .
 # git commit -m "Added password strength validator"
 # git push
+# pip freeze > requirements.txt

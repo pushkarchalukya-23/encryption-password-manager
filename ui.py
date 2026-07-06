@@ -21,11 +21,11 @@ def userlogincheck():
     username = input("Enter your username : ")
     if checkusernamedb(username) == 0:
         print("Invalid Username!")
-        return True
+        return False
     master_password = input("Enter your password : ")
     if verify_password(master_password,username) == 0:
         print("Incorrect Password!")
-        return True
+        return False
     
 def checktables():
     mycon , cursor = get_connect()

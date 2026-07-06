@@ -6,7 +6,7 @@ def checkusernamedb(username):
     data = cursor.fetchall()
     flag = 0
     for i in data:
-        if username == i:
+        if username == i[0]:
             flag = 1
     cursor.close()
     mycon.close()

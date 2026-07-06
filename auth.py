@@ -5,16 +5,16 @@ from validation import checkusernamedb,checkusername
 from encryption import encrypt,decrypt,hashpasswd
 #user table queries
 def register():
-    #true means error
-    #means correct
+    #true means correct
+    #false means error
     print("~~~~~~~~ Fill in Your Details ~~~~~~~~")
     print("""Rules for Unique Username:\n~Min & Max Length (8 to 25) characters\n~Contain Letters,Symbols,Digits\n~No Space in between""")
     username = input("Enter a Unique Username : ")
     if checkusername(username) == 1:
-        return True
+        return False
     if checkusernamedb(username) == 1:
         print("Username already exists! Try Something Else")
-        return True
+        return False
     
     salt = ""
 
@@ -31,14 +31,17 @@ def register():
     mycon.commit()
     cursor.close()
     mycon.close()
-    return False
+    return True
     
 # change_master_password
-def verify_password(master_password,username):
+def verify_password(password,username):
     mycon , cursor = get_connect()
-    cursor.execute("""SELECT master_password_encrypted FROM users WHERE username = '{}';""".format(username))
+    cursor.execute("""SELECT master_password_encrypted, salt_encrypted, user_id FROM users WHERE username = '{}';""".format(username))
     data = cursor.fetchall()
-    flag = 0
-    if decrypt(data[0][0]) == master_password:
-        flag = 1
-    return flag
+    master_password_decrypted = decrypt(data[0][0])
+    salt_decrypted = decrypt(data[0][1])
+    dbpassword = master_password_decrypted.removeprefix(salt_decrypted)
+    # [('O86nPy@ZnyD8P[y', '', 102)]
+    if dbpassword != password:
+        return False
+    return data[0][2] #returning user_id if password is correct
