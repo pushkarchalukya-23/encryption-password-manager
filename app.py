@@ -6,12 +6,12 @@ def run():
     checktables()
     while True :
         choice1 = usersigninpage()
-        if choice1 in [1,2]:
-            if choice1 == 1:
+        if choice1 in ['1','2']:
+            if choice1 == '1':
                 x = userlogincheck() #user sign in page
                 if not x : 
                    continue
-            elif choice1 == 2:
+            elif choice1 == '2':
                 x = register() #user registering page
                 if not x :
                    continue
@@ -19,7 +19,7 @@ def run():
             if not controlpanel(x):
                 continue
 
-        elif choice1 == 3: 
+        elif choice1 == '3': 
             print("Thanks For Visiting this Program!")
             break
         else:

@@ -29,4 +29,5 @@ def create_table_vault(cursor):
                 website_name VARCHAR(100) NOT NULL,
                 web_username VARCHAR(100) NOT NULL,
                 web_password_encrypted VARCHAR(200) NOT NULL,
+                web_salt_encrypted VARCHAR(100) NOT NULL,
                 note VARCHAR(300) )""")

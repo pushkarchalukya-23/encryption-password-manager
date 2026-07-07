@@ -63,4 +63,12 @@ def userlogincheck():
     if not verify_password(master_password,username):
         print("Incorrect Password!")
         return False
+    else:
+        mycon , cursor = get_connect()
+        cursor.execute("""SELECT user_id FROM users WHERE username = '{}';""".format(username))
+        data = cursor.fetchall()
+        cursor.close()
+        mycon.close()
+        return data[0][0] #returned user_id if everything went correct
+    
     

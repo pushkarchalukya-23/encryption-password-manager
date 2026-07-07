@@ -1,15 +1,15 @@
 from database import get_connect
-#at the time of register n login
+
 def checkusernamedb(username):
     mycon , cursor = get_connect()
     cursor.execute("""SELECT username FROM users;""")
     data = cursor.fetchall()
     for i in data:
-        if username == i[0]:
+        if i[0] == username :
             cursor.close()
             mycon.close()
-            return False
-    return True #otherwise 
+            return True #found
+    return False #otherwise not found
 
 def checkusername(username):
     flag = 0
@@ -35,10 +35,8 @@ def checkusername(username):
         print("Spaces not Allowed!")
     return flag
 
-
 # email
 # password
 # password match
 # website
 # notes
-# not_empty

@@ -23,8 +23,8 @@ def verifyhash(hashedpass,password):
 def decrypt(encrypted):
     decrypted = ""
     for i in encrypted:
-        if (ENCRYPTION_STRING.find(i) + ENCRYPTION_KEY) > 92:
-            decrypted += ENCRYPTION_STRING[ENCRYPTION_STRING.find(i) + ENCRYPTION_KEY - 92]
+        if (ENCRYPTION_STRING.find(i) + ENCRYPTION_KEY) > len(ENCRYPTION_STRING):
+            decrypted += ENCRYPTION_STRING[ENCRYPTION_STRING.find(i) + ENCRYPTION_KEY - len(ENCRYPTION_STRING)]
         else:
             decrypted += ENCRYPTION_STRING[ENCRYPTION_STRING.find(i) + ENCRYPTION_KEY]
     return decrypted

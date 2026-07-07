@@ -7,13 +7,13 @@ from validation import checkusernamedb
 def usersigninpage():
     print("<------ USER SIGN IN / SIGN UP ------>")
     print("""1. Already Have an Account ?\n2. Register\n3. Back""")
-    choice = int(input("Enter your Choice : "))
+    choice = input("Enter your Choice : ")
     return choice
 
 
 def controlpanel(user_id):
     print("============= MAIN MENU ==============")
-    print("""   [1] SAVE NEW PASSWORD
+    print("""    [1] SAVE NEW PASSWORD
     [2] SEARCH PASSWORDS
     [3] RESET MASTER_PASSWORD
     [4] UPDATE PASSWORD
@@ -28,6 +28,7 @@ def controlpanel(user_id):
     elif choice2 == 4:
         pass
     elif choice2 == 5:
+        print(">>> Logging Out ...")
         return False
     
 def checktables():
