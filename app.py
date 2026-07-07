@@ -1,37 +1,28 @@
-from ui import mainpage,checktables,usersigninpage,userlogincheck
-from auth import register
+from ui import checktables,usersigninpage,controlpanel
+from auth import register,userlogincheck
 
 #main thread
 def run():
     checktables()
-
     while True :
-        #checking choice
-        choice = mainpage()
-        if (choice == 1) : #admin panel
-            continue
-            #adminlogin()
+        choice1 = usersigninpage()
+        if choice1 in [1,2]:
+            if choice1 == 1:
+                x = userlogincheck() #user sign in page
+                if not x : 
+                   continue
+            elif choice1 == 2:
+                x = register() #user registering page
+                if not x :
+                   continue
 
-        elif (choice == 2) : #user panel
-            while True :
-                choice1 = usersigninpage()
+            if not controlpanel(x):
+                continue
 
-                if choice1 in [1,2]:
-                    if choice1 == 1:
-                        if not userlogincheck() : #user sign in page
-                            continue
-                    elif choice1 == 2:
-                        if not register() : #user registering page
-                            continue
-                    #actual user password manager panel
-
-                elif choice1 == 3: 
-                    break
-                else:
-                    print("Invalid Choice !")
-        elif (choice == 3) : #exit
+        elif choice1 == 3: 
+            print("Thanks For Visiting this Program!")
             break
-        else :
+        else:
             print("Invalid Choice !")
 # git commands
 # git add .

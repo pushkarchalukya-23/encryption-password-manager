@@ -4,13 +4,12 @@ def checkusernamedb(username):
     mycon , cursor = get_connect()
     cursor.execute("""SELECT username FROM users;""")
     data = cursor.fetchall()
-    flag = 0
     for i in data:
         if username == i[0]:
-            flag = 1
-    cursor.close()
-    mycon.close()
-    return flag
+            cursor.close()
+            mycon.close()
+            return False
+    return True #otherwise 
 
 def checkusername(username):
     flag = 0
