@@ -1,8 +1,5 @@
 from database import get_connect,create_table_users,create_table_vault
-from auth import verify_password
-from validation import checkusernamedb
-#gonna add one more table for hashed passwords, separate table for encrypted and hashed ones, create table, diff option for hashing
-
+from models import save
 # decide whether to open admin page or user page for different functions
 def usersigninpage():
     print("<------ USER SIGN IN / SIGN UP ------>")
@@ -12,25 +9,43 @@ def usersigninpage():
 
 
 def controlpanel(user_id):
-    print("============= MAIN MENU ==============")
-    print("""    [1] SAVE NEW PASSWORD
-    [2] SEARCH PASSWORDS
-    [3] RESET MASTER_PASSWORD
-    [4] UPDATE PASSWORD
-    [5] LOGOUT""")
+    print("======================================")
+    print("             MAIN MENU")
+    print("======================================")
+    print("""[1] SEARCH WEB_PASSWORDS
+[2] SAVE NEW WEB_PASSWORD
+[3] UPDATE WEB_PASSWORD
+[4] DELETE WEB_PASSWORD
+[5] RESET MASTER_PASSWORD
+[6] DELETE USER ACCOUNT
+[7] LOGOUT""")
+
     choice2 = int(input("Enter your Preference : "))
     if choice2 == 1:
-        pass
+        #search(user_id)
+        return True
     elif choice2 == 2:
-        pass
+        save(user_id)
+        return True
     elif choice2 == 3:
-        pass
+        #update(user_id)
+        return True
     elif choice2 == 4:
-        pass
+        #delete(user_id)
+        return True
     elif choice2 == 5:
+        #reset(user_id)
+        return True
+    elif choice2 == 6:
+        #deleteacc(user_id)
+        return False
+    elif choice2 == 7:
         print(">>> Logging Out ...")
         return False
-    
+    else:
+        print(">>> Invalid Preference !")
+        return True
+
 def checktables():
     mycon , cursor = get_connect()
     #checking if tables exists or not , otherwise creating them

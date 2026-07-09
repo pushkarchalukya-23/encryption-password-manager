@@ -15,15 +15,17 @@ def run():
                 x = register() #user registering page
                 if not x :
                    continue
-
-            if not controlpanel(x):
-                continue
+            
+            while True:
+                if not controlpanel(x):
+                    break
 
         elif choice1 == '3': 
             print("Thanks For Visiting this Program!")
             break
         else:
-            print("Invalid Choice !")
+            print(">>> Invalid Choice !")
+
 # git commands
 # git add .
 # git commit -m "Added password strength validator"

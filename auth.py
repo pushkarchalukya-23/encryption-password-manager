@@ -10,19 +10,27 @@ def register():
     #true means correct
     #false means error
     print("~~~~~~~~ Fill in Your Details ~~~~~~~~")
-    print("""Rules for Unique Username:\n~Min & Max Length (8 to 25) characters\n~Contain Letters,Symbols,Digits\n~No Space in between""")
+    print("""Rules for Unique Username:\n~Min & Max Length (8 to 25) characters\n~Contain LowerCase Letters,Symbols,Digits\n~No Spaces Allowed""")
     username = input("Enter a Unique Username : ")
     if checkusername(username) == 1:
         return False
+    print(">>> Checking Availability ...")
     if checkusernamedb(username) == 1:
-        print("Username already exists! Try Something Else")
+        print(">>> Username already exists! Try Something Else")
         return False
-    
-    salt = ""
-    for i in range(random.randint(3,10)):
-        salt += random.choice(ENCRYPTION_STRING)
+    else:
+        print(">>> Username Available for Use !")
     
     master_password = input("Enter your Master Password : ")
+
+    #check password strength
+    #ask whether to use it or change it
+    #move forward
+
+    salt = ""
+    for i in range(random.randint(3,15)):
+        salt += random.choice(ENCRYPTION_STRING)
+
     master_password_encrypted = encrypt(salt + master_password)
     salt_encrypted = encrypt(salt)
     
@@ -56,12 +64,15 @@ def verify_password(password,username):
 def userlogincheck():
     print("~~~~~~~~ Fill in Your Details ~~~~~~~~")
     username = input("Enter your Username : ")
+    
+    if checkusername(username) == 1:
+        return False
     if not checkusernamedb(username):
-        print("Invalid Username!")
+        print(">>> Account with Username does not exists!")
         return False
     master_password = input("Enter your Master Password : ")
     if not verify_password(master_password,username):
-        print("Incorrect Password!")
+        print(">>> Incorrect Password!")
         return False
     else:
         mycon , cursor = get_connect()
