@@ -1,5 +1,5 @@
 from database import get_connect,create_table_users,create_table_vault
-from models import save
+from models import save,search
 # decide whether to open admin page or user page for different functions
 def usersigninpage():
     print("<------ USER SIGN IN / SIGN UP ------>")
@@ -9,9 +9,9 @@ def usersigninpage():
 
 
 def controlpanel(user_id):
-    print("======================================")
-    print("             MAIN MENU")
-    print("======================================")
+    print("+------------------------------------+")
+    print("|             MAIN MENU              |")
+    print("+------------------------------------+")
     print("""[1] SEARCH WEB_PASSWORDS
 [2] SAVE NEW WEB_PASSWORD
 [3] UPDATE WEB_PASSWORD
@@ -22,7 +22,7 @@ def controlpanel(user_id):
 
     choice2 = int(input("Enter your Preference : "))
     if choice2 == 1:
-        #search(user_id)
+        search(user_id)
         return True
     elif choice2 == 2:
         save(user_id)

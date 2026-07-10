@@ -49,9 +49,7 @@ def verify_password(password,username):
     mycon , cursor = get_connect()
     cursor.execute("""SELECT master_password_encrypted, salt_encrypted, user_id FROM users WHERE username = '{}';""".format(username))
     data = cursor.fetchall()
-    master_password_decrypted = decrypt(data[0][0])
-    salt_decrypted = decrypt(data[0][1])
-    dbpassword = master_password_decrypted.removeprefix(salt_decrypted)
+    dbpassword = decrypt(data[0][0]).removeprefix(decrypt(data[0][1])) #masterpassword decrypted and removed salt
     if dbpassword != password:
         cursor.close()
         mycon.close()
