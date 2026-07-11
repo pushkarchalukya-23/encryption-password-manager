@@ -1,6 +1,7 @@
 from database import get_connect
 from encryption import encrypt, decrypt
 from config import ENCRYPTION_STRING
+from auth import verify_password
 import random
 
 # save password
@@ -261,3 +262,42 @@ def update(user_id):
                 return True
     else:
         print(">>> No Matches Found !")
+
+def reset(user_id,username):
+    print("==========================================")
+    print("       RESETING MASTER PASSWORD :-") 
+    print("==========================================")
+    a = input("Confirm Again to Reset Your Master Password (y/n) :")
+    if a == 'y':
+        oldpassword = input("Confirm your Current Master Password : ")
+        if not verify_password(oldpassword,username):
+            print(">>> Incorrect Password!")
+            return True
+        else:
+            while True:
+                print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+                newpassword1 = input("Enter New Master Password : ")
+                newpassword2 = input("Confirm Again New Master Password : ")
+                if newpassword1 == newpassword2 :
+                    b = input("Press [s] to save it, [r] to re-enter : ").lower()
+
+                    if b == 's':
+                        print(">>> Resetting New Master Password ...")
+                        salt = ""
+                        for i in range(random.randint(3,15)):
+                            salt += random.choice(ENCRYPTION_STRING)
+                        
+                        query = """UPDATE users SET master_password_encrypted = '{}' , salt_encrypted = '{}' 
+                        WHERE user_id = '{}';""".format(encrypt(salt + newpassword1), encrypt(salt), user_id)
+
+                        mycon , cursor = get_connect()
+                        cursor.execute(query)
+                        mycon.commit()
+                        cursor.close()
+                        mycon.close()
+                        return True
+                    else :
+                        continue
+
+                else:
+                    print(">>> Unable to Match New Master Passwords !")

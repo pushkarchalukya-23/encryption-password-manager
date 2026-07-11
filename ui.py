@@ -1,5 +1,5 @@
 from database import get_connect,create_table_users,create_table_vault
-from models import save,search,allpasswd,delete,update
+from models import save,search,allpasswd,delete,update,reset
 # decide whether to open admin page or user page for different functions
 def usersigninpage():
     print("<------ USER SIGN IN / SIGN UP ------>")
@@ -8,7 +8,7 @@ def usersigninpage():
     return choice
 
 
-def controlpanel(user_id):
+def controlpanel(user_id,username):
     print("+------------------------------------+")
     print("|             MAIN MENU              |")
     print("+------------------------------------+")
@@ -38,7 +38,7 @@ def controlpanel(user_id):
         allpasswd(user_id)
         return True
     elif choice2 == 6:
-        #reset(user_id)
+        reset(user_id,username)
         return True
     elif choice2 == 7:
         #deleteacc(user_id)

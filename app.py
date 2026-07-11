@@ -8,16 +8,16 @@ def run():
         choice1 = usersigninpage()
         if choice1 in ['1','2']:
             if choice1 == '1':
-                x = userlogincheck() #user sign in page
-                if not x : 
+                user_id , username = userlogincheck() #user sign in page
+                if not user_id : 
                    continue
             elif choice1 == '2':
-                x = register() #user registering page
-                if not x :
+                user_id , username = register() #user registering page
+                if not user_id :
                    continue
             
             while True:
-                if not controlpanel(x):
+                if not controlpanel(user_id , username):
                     break
 
         elif choice1 == '3': 

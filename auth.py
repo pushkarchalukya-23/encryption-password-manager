@@ -13,11 +13,11 @@ def register():
     print("""Rules for Unique Username:\n~Min & Max Length (8 to 25) characters\n~Contain LowerCase Letters,Symbols,Digits\n~No Spaces Allowed""")
     username = input("Enter a Unique Username : ")
     if checkusername(username) == 1:
-        return False
+        return False , False
     print(">>> Checking Availability ...")
     if checkusernamedb(username) == 1:
         print(">>> Username already exists! Try Something Else")
-        return False
+        return False , False
     else:
         print(">>> Username Available for Use !")
     
@@ -42,7 +42,7 @@ def register():
     data = cursor.fetchall()
     cursor.close()
     mycon.close()
-    return data[0][0] #returned user_id if everything went correct
+    return data[0][0] , username #returned user_id if everything went correct
 
 #verify master password
 def verify_password(password,username):
@@ -74,10 +74,10 @@ def userlogincheck():
         return False
     else:
         mycon , cursor = get_connect()
-        cursor.execute("""SELECT user_id FROM users WHERE username = '{}';""".format(username))
+        cursor.execute("""SELECT user_id, FROM users WHERE username = '{}';""".format(username))
         data = cursor.fetchall()
         cursor.close()
         mycon.close()
-        return data[0][0] #returned user_id if everything went correct
+        return data[0][0] , username #returned user_id if everything went correct
     
     

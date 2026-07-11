@@ -18,7 +18,7 @@ def create_table_users(cursor):
                 user_id INT AUTO_INCREMENT PRIMARY KEY,
                 username VARCHAR(30) UNIQUE NOT NULL,
                 master_password_encrypted VARCHAR(50) NOT NULL,
-                salt_encrypted VARCHAR(10) NOT NULL,
+                salt_encrypted VARCHAR(20) NOT NULL,
                 created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP) AUTO_INCREMENT = 101;""")
     #insert into users(username,master_password_encrypted,salt_encrypted)
     #values('your_username','your password','salt');
