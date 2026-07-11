@@ -47,8 +47,19 @@ def but2():
     return url
 
 def but3():
-    username = input("Enter Website Username : ")
+    username = input("Enter Website Username (eg. @abc): ")
     return username
+
+def but4():
+    password = input("Enter Website Password : ")
+    salt = ""
+    for i in range(random.randint(3,15)):
+        salt += random.choice(ENCRYPTION_STRING)
+    return encrypt(salt + password), encrypt(salt)
+
+def but5():
+    note =  input("Enter a Note [Max Length = 300 characters] : ")
+    return note
 
 def search(user_id):
     print(":::::::::::::::::::::::::::::::::::::::::::::::")
@@ -68,16 +79,15 @@ def search(user_id):
     ltwus = "("
     
     for i in ch:
-        i = int(i)
-        if i == 1:
+        if i == '1':
             ltwna += "'" + but1() + "',"
             wna = True
 
-        elif i == 2:
+        elif i == '2':
             ltwur += "'" + but2() + "',"
             wur = True
 
-        elif i == 3:
+        elif i == '3':
             ltwus += "'" + but3() + "',"
             wus = True
 
@@ -187,3 +197,67 @@ def delete(user_id):
         return True
 
 # update password
+def update(user_id):
+    print("==========================================")
+    print("           UPDATING PASSWORD :-") 
+    print("==========================================")
+    passwd_id = input("Enter Password ID to update = ")
+    #CHECKING IF EXISTS OR NOT
+    query = """SELECT website_name, website_url, web_username, web_password_encrypted,
+            web_salt_encrypted, note FROM vault WHERE user_id = {} AND passwd_id = {}""".format(user_id,passwd_id)
+    
+    mycon , cursor = get_connect()
+    cursor.execute(query)
+    data = cursor.fetchall()
+    if data :
+        for i in data:
+            print("1) Website Name = " + i[0])
+            print("2) Website URL = " + i[1])
+            print("3) Website Username = " + i[2])
+            print("4) Website Password = " + decrypt(i[3]).removeprefix(decrypt(i[4]))) #web password decypted and removed salt
+            print("5) Note = " + i[5])
+            print("==========================================")
+            a = input("You wanna update it ? (y/n) : ").lower()
+            if a == 'y':
+                query = """UPDATE vault SET """
+                b = input("Enter Fields to update (eg. 4 or 2145) : ")
+                count1 = False
+                count2 = False
+                count3 = False
+                count4 = False
+                count5 = False
+                for i in b:
+                    if (i == '1') and not count1:
+                        query += "website_name = '{}' , ".format(but1())
+                        count1 = True
+
+                    elif (i == '2') and not count2:
+                        query += "website_url = '{}' , ".format(but2())
+                        count2 = True
+
+                    elif (i == '3') and not count3:
+                        query += "web_username = '{}' , ".format(but3())
+                        count3 = True
+
+                    elif (i == '4') and not count4:
+                        password , salt = but4()
+                        query += "web_password_encrypted = '{}' , web_salt_encrypted = '{}' , ".format(password,salt)
+                        count4= True
+
+                    elif (i == '5') and not count5:
+                        query += "note = '{}' , ".format(but5())
+                        count5 = True
+                    else:
+                        pass
+                query = query[:-2] + "WHERE user_id = '{}' AND passwd_id = '{}';".format(user_id, passwd_id)
+                print(">>> UPDATING ...")
+                cursor.execute(query)
+                mycon.commit()
+                cursor.close()
+                mycon.close()
+                return True
+            else:
+                print(">>> No Updates Done ...")
+                return True
+    else:
+        print(">>> No Matches Found !")

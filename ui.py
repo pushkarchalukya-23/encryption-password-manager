@@ -1,9 +1,9 @@
 from database import get_connect,create_table_users,create_table_vault
-from models import save,search,allpasswd,delete
+from models import save,search,allpasswd,delete,update
 # decide whether to open admin page or user page for different functions
 def usersigninpage():
     print("<------ USER SIGN IN / SIGN UP ------>")
-    print("""1. Already Have an Account ?\n2. Register\n3. Back""")
+    print("""1. Already Have an Account ?\n2. Register\n3. Exit""")
     choice = input("Enter your Choice : ")
     return choice
 
@@ -29,7 +29,7 @@ def controlpanel(user_id):
         save(user_id)
         return True
     elif choice2 == 3:
-        #update(user_id)
+        update(user_id)
         return True
     elif choice2 == 4:
         delete(user_id)
