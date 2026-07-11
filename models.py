@@ -29,7 +29,9 @@ def save(user_id):
     web_password_encrypted = encrypt(salt + web_password)
 
     mycon , cursor = get_connect()
-    cursor.execute("""INSERT INTO vault VALUES ({},'{}','{}','{}','{}','{}','{}');""".format(user_id, web_name, web_url, 
+    cursor.execute("""INSERT INTO vault(user_id, website_name, 
+    website_url, web_username, web_password_encrypted, web_salt_encrypted, 
+    note) VALUES ({},'{}','{}','{}','{}','{}','{}');""".format(user_id, web_name, web_url, 
     web_username, web_password_encrypted, salt_encrypted, note))
     mycon.commit()
     cursor.close()
@@ -82,7 +84,7 @@ def search(user_id):
         else:
             pass
 
-    query = """SELECT website_name, website_url, web_username, web_password_encrypted,
+    query = """SELECT passwd_id, website_name, website_url, web_username, web_password_encrypted,
             web_salt_encrypted, note FROM vault WHERE user_id = {}""".format(user_id)
     
     fwna = ltwna[:-1] + ")"
@@ -104,11 +106,12 @@ def search(user_id):
         print("         Search Results are :-") 
         print("==========================================")
         for i in data:
-            print("Website Name = " + i[0])
-            print("Website URL = " + i[1])
-            print("Website Username = " + i[2])
-            print("Website Password = " + decrypt(i[3]).removeprefix(decrypt(i[4]))) #web password decypted and removed salt
-            print("Note = " + i[5])
+            print("Password ID = " , i[0])
+            print("Website Name = " + i[1])
+            print("Website URL = " + i[2])
+            print("Website Username = " + i[3])
+            print("Website Password = " + decrypt(i[4]).removeprefix(decrypt(i[5]))) #web password decypted and removed salt
+            print("Note = " + i[6])
             print("==========================================")
     else:
         print("No Results Found!")
@@ -118,6 +121,69 @@ def search(user_id):
     mycon.close()
     return True
     
-# get passwords
+#see all saved passwords
+def allpasswd(user_id):
+    print("==========================================")
+    print("         ALL SAVED PASSWORDS :-") 
+    print("==========================================")
+    query = """SELECT passwd_id, website_name, website_url, web_username, web_password_encrypted,
+            web_salt_encrypted, note FROM vault WHERE user_id = {}""".format(user_id)
+    
+    mycon , cursor = get_connect()
+    cursor.execute(query)
+    data = cursor.fetchall()
+    if data :
+        for i in data:
+            print("Password ID = " , i[0])
+            print("Website Name = " + i[1])
+            print("Website URL = " + i[2])
+            print("Website Username = " + i[3])
+            print("Website Password = " + decrypt(i[4]).removeprefix(decrypt(i[5]))) #web password decypted and removed salt
+            print("Note = " + i[6])
+            print("==========================================")
+    else:
+        print(">>> No Results Found!")
+        print("==========================================")
+    cursor.close()
+    mycon.close()
+    return True
+
 # delete password
+def delete(user_id):
+    print("==========================================")
+    print("           DELETING PASSWORD :-") 
+    print("==========================================")
+    passwd_id = input("Enter Password ID to delete = ")
+    #CHECKING IF EXISTS OR NOT
+    query = """SELECT website_name, website_url, web_username, web_password_encrypted,
+            web_salt_encrypted, note FROM vault WHERE user_id = {} AND passwd_id = {}""".format(user_id,passwd_id)
+    
+    mycon , cursor = get_connect()
+    cursor.execute(query)
+    data = cursor.fetchall()
+    if data :
+        for i in data:
+            print("Website Name = " + i[0])
+            print("Website URL = " + i[1])
+            print("Website Username = " + i[2])
+            print("Website Password = " + decrypt(i[3]).removeprefix(decrypt(i[4]))) #web password decypted and removed salt
+            print("Note = " + i[5])
+            print("==========================================")
+            a = input("You wanna delete it ? (y/n) : ").lower()
+            if a == "y":
+                print(">>> Deleting Password ...")
+                query1 = """DELETE FROM vault WHERE user_id = {} AND passwd_id = {};""".format(user_id, passwd_id)
+                cursor.execute(query1)
+                mycon.commit()
+                cursor.close()
+                mycon.close()
+                return True
+            else:
+                print(">>> It just Dodged a Bullet !")
+                return True
+    else:
+        print(">>> No Matches Found!")
+        print("==========================================")
+        return True
+
 # update password

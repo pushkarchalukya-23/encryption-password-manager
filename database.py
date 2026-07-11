@@ -25,10 +25,11 @@ def create_table_users(cursor):
 
 def create_table_vault(cursor):
     cursor.execute("""CREATE TABLE vault (
+                passwd_id INT AUTO_INCREMENT PRIMARY KEY ,
                 user_id INT NOT NULL,
                 website_name VARCHAR(100) NOT NULL,
                 website_url VARCHAR(400),
                 web_username VARCHAR(100) NOT NULL,
                 web_password_encrypted VARCHAR(200) NOT NULL,
                 web_salt_encrypted VARCHAR(100) NOT NULL,
-                note VARCHAR(300) )""")
+                note VARCHAR(300) ) AUTO_INCREMENT = 554;""")
