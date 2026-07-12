@@ -42,7 +42,7 @@ def register():
     data = cursor.fetchall()
     cursor.close()
     mycon.close()
-    return data[0][0] , username #returned user_id if everything went correct
+    return data[0][0] , username #returned user_id , username if everything went correct
 
 #verify master password
 def verify_password(password,username):
@@ -64,20 +64,20 @@ def userlogincheck():
     username = input("Enter your Username : ")
     
     if checkusername(username) == 1:
-        return False
+        return False , False
     if not checkusernamedb(username):
         print(">>> Account with Username does not exists!")
-        return False
+        return False , False
     master_password = input("Enter your Master Password : ")
     if not verify_password(master_password,username):
         print(">>> Incorrect Password!")
-        return False
+        return False , False
     else:
         mycon , cursor = get_connect()
-        cursor.execute("""SELECT user_id, FROM users WHERE username = '{}';""".format(username))
+        cursor.execute("""SELECT user_id FROM users WHERE username = '{}';""".format(username))
         data = cursor.fetchall()
         cursor.close()
         mycon.close()
-        return data[0][0] , username #returned user_id if everything went correct
+        return data[0][0] , username #returned user_id , username if everything went correct
     
     

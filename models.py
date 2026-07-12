@@ -112,6 +112,8 @@ def search(user_id):
     mycon , cursor = get_connect()
     cursor.execute(query)
     data = cursor.fetchall()
+    cursor.close()
+    mycon.close()
     if data :
         print("==========================================")
         print("         Search Results are :-") 
@@ -127,9 +129,7 @@ def search(user_id):
     else:
         print("No Results Found!")
         print("==========================================")
-
-    cursor.close()
-    mycon.close()
+    
     return True
     
 #see all saved passwords
@@ -143,6 +143,8 @@ def allpasswd(user_id):
     mycon , cursor = get_connect()
     cursor.execute(query)
     data = cursor.fetchall()
+    cursor.close()
+    mycon.close()
     if data :
         for i in data:
             print("Password ID = " , i[0])
@@ -155,8 +157,7 @@ def allpasswd(user_id):
     else:
         print(">>> No Results Found!")
         print("==========================================")
-    cursor.close()
-    mycon.close()
+
     return True
 
 # delete password
@@ -171,31 +172,30 @@ def delete(user_id):
     
     mycon , cursor = get_connect()
     cursor.execute(query)
-    data = cursor.fetchall()
+    data = cursor.fetchone()
     if data :
-        for i in data:
-            print("Website Name = " + i[0])
-            print("Website URL = " + i[1])
-            print("Website Username = " + i[2])
-            print("Website Password = " + decrypt(i[3]).removeprefix(decrypt(i[4]))) #web password decypted and removed salt
-            print("Note = " + i[5])
-            print("==========================================")
-            a = input("You wanna delete it ? (y/n) : ").lower()
-            if a == "y":
-                print(">>> Deleting Password ...")
-                query1 = """DELETE FROM vault WHERE user_id = {} AND passwd_id = {};""".format(user_id, passwd_id)
-                cursor.execute(query1)
-                mycon.commit()
-                cursor.close()
-                mycon.close()
-                return True
-            else:
-                print(">>> It just Dodged a Bullet !")
-                return True
+        print("Website Name = " + data[0][0])
+        print("Website URL = " + data[0][1])
+        print("Website Username = " + data[0][2])
+        print("Website Password = " + decrypt(data[0][3]).removeprefix(decrypt(data[0][4]))) #web password decypted and removed salt
+        print("Note = " + data[0][5])
+        print("==========================================")
+        a = input("You wanna delete it ? (y/n) : ").lower()
+        if a == "y":
+            print(">>> Deleting Password ...")
+            query1 = """DELETE FROM vault WHERE user_id = {} AND passwd_id = {};""".format(user_id, passwd_id)
+            cursor.execute(query1)
+            mycon.commit()
+            return True
+        else:
+            print(">>> It just Dodged a Bullet !")
+            return True
     else:
         print(">>> No Matches Found!")
         print("==========================================")
-        return True
+    cursor.close()
+    mycon.close()
+    return True
 
 # update password
 def update(user_id):
@@ -254,14 +254,16 @@ def update(user_id):
                 print(">>> UPDATING ...")
                 cursor.execute(query)
                 mycon.commit()
-                cursor.close()
-                mycon.close()
                 return True
             else:
                 print(">>> No Updates Done ...")
                 return True
     else:
         print(">>> No Matches Found !")
+    
+    cursor.close()
+    mycon.close()
+    return True
 
 def reset(user_id,username):
     print("==========================================")
@@ -301,3 +303,36 @@ def reset(user_id,username):
 
                 else:
                     print(">>> Unable to Match New Master Passwords !")
+                    return True
+
+def deleteacc(user_id):
+    print("==========================================")
+    print("         DELETING USER ACCOUNT :-") 
+    print("==========================================")
+    print("""Deleteing the account may Result in Loss of Data
+All the Passwords and Credentials will be lost 
+which are saved in this account...""")
+    
+    a = input("Press [d] delete account , [b] back to main menu : ").lower()
+    if a == 'd':
+        b = input("Confirm Again to Delete Account (y/n) : ").lower()
+
+        if b == 'y':
+            print(">>> DELETING THIS ACCOUNT ...")
+            query1 = """DELETE FROM vault WHERE user_id = {};""".format(user_id)
+            query2 = """DELETE FROM users WHERE user_id = {};""".format(user_id)
+            mycon , cursor = get_connect()
+            cursor.execute(query1)
+            mycon.commit()
+            cursor.execute(query2)
+            mycon.commit()
+
+            cursor.close()
+            mycon.close()
+            return True
+        else:
+            print(">>> ACCOUNT IS SAFE ...")
+            return True
+    else:
+        print(">>> ACCOUNT IS SAFE ...")
+        return True
