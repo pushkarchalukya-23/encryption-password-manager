@@ -95,6 +95,7 @@ def search(user_id):
         else:
             pass
 
+    flag = 0
     query = """SELECT passwd_id, website_name, website_url, web_username, web_password_encrypted,
             web_salt_encrypted, note FROM vault WHERE user_id = {}""".format(user_id)
     
@@ -104,32 +105,37 @@ def search(user_id):
 
     if wna:
         query += """ AND website_name IN {}""".format(fwna)
+        flag = 1
     if wur:
         query += """ AND website_url IN {}""".format(fwur)
+        flag = 1
     if wus:
         query += """ AND web_username IN {}""".format(fwus)
+        flag = 1
 
-    mycon , cursor = get_connect()
-    cursor.execute(query)
-    data = cursor.fetchall()
-    cursor.close()
-    mycon.close()
-    if data :
-        print("==========================================")
-        print("         Search Results are :-") 
-        print("==========================================")
-        for i in data:
-            print("Password ID = " , i[0])
-            print("Website Name = " + i[1])
-            print("Website URL = " + i[2])
-            print("Website Username = " + i[3])
-            print("Website Password = " + decrypt(i[4]).removeprefix(decrypt(i[5]))) #web password decypted and removed salt
-            print("Note = " + i[6])
+    if flag == 1:
+        mycon , cursor = get_connect()
+        cursor.execute(query)
+        data = cursor.fetchall()
+        cursor.close()
+        mycon.close()
+        if data :
+            print("==========================================")
+            print("         Search Results are :-") 
+            print("==========================================")
+            for i in data:
+                print("Password ID = " , i[0])
+                print("Website Name = " + i[1])
+                print("Website URL = " + i[2])
+                print("Website Username = " + i[3])
+                print("Website Password = " + decrypt(i[4]).removeprefix(decrypt(i[5]))) #web password decypted and removed salt
+                print("Note = " + i[6])
+                print("==========================================")
+        else:
+            print("No Results Found!")
             print("==========================================")
     else:
-        print("No Results Found!")
-        print("==========================================")
-    
+        print(">>> Invalid Choice!")
     return True
     
 #see all saved passwords
@@ -309,7 +315,7 @@ def deleteacc(user_id):
     print("==========================================")
     print("         DELETING USER ACCOUNT :-") 
     print("==========================================")
-    print("""Deleteing the account may Result in Loss of Data
+    print("""Deleting the account may Result in Loss of Data
 All the Passwords and Credentials will be lost 
 which are saved in this account...""")
     
