@@ -14,8 +14,8 @@ def encrypt(password):
 def decrypt(encrypted):
     decrypted = ""
     for i in encrypted:
-        if (ENCRYPTION_STRING.find(i) + ENCRYPTION_KEY) > len(ENCRYPTION_STRING):
-            decrypted += ENCRYPTION_STRING[ENCRYPTION_STRING.find(i) + ENCRYPTION_KEY - len(ENCRYPTION_STRING)]
+        if (ENCRYPTION_STRING.find(i) + ENCRYPTION_KEY) > len(ENCRYPTION_STRING) - 1:
+            decrypted += ENCRYPTION_STRING[ENCRYPTION_STRING.find(i) + ENCRYPTION_KEY - len(ENCRYPTION_STRING) ]
         else:
             decrypted += ENCRYPTION_STRING[ENCRYPTION_STRING.find(i) + ENCRYPTION_KEY]
     return decrypted
